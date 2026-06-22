@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* main {
+  max-width: 100vw;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main > div {
+  border: 2px solid;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+}
+#WritingTextArea {
+  width: 100%;
+  height: 100%;
+  border: none;
+} */
+
+main {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr;
+}
+main > div {
+  border: 2px solid;
+  text-align: center;
+  height: 100vh;
+}
