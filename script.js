@@ -16,7 +16,7 @@ function savedNotes() {
   localStorage.setItem("markdownNotes", JSON.stringify(renderNotes));
 }
 
-addNoteButton.addEventListener("click", function () {
+function dateFunction() {
   //Better time id with actuall time and date
   const options = {
     day: "numeric",
@@ -32,12 +32,18 @@ addNoteButton.addEventListener("click", function () {
     .toLocaleString("en-US", options)
     .toLowerCase();
 
+  return uniqueTimeId;
+}
+
+addNoteButton.addEventListener("click", function () {
+  dateFunction();
+
   // Notes object
   const newNoteObject = {
-    id: "N" + uniqueTimeId,
+    id: "N" + dateFunction(),
     title: "Untitled",
     content: "Type your text here...",
-    updatedAt: uniqueTimeId,
+    updatedAt: dateFunction(),
   };
 
   renderNotes.push(newNoteObject);
@@ -77,5 +83,21 @@ function NotesTitleFunction() {
     });
   });
 }
+
+WritingTextArea.addEventListener("input", function () {
+  //  Stop immediately if no active note
+  if (!activeNoteId) return;
+  //  Find the folder
+  const activeNote = renderNotes.find(function (note) {
+    return note.id === activeNoteId;
+  });
+  //  Update the folder now that you have it
+  if (activeNote) {
+    activeNote.content = WritingTextArea.value;
+    activeNote.updatedAt = dateFunction();
+    savedNotes();
+    NotesTitleFunction();
+  }
+});
 
 NotesTitleFunction();
