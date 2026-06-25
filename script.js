@@ -80,9 +80,12 @@ function NotesTitleFunction() {
       activeNoteId = elementTitle.id;
       WritingTextArea.value = elementTitle.content;
       NotesTitleFunction();
+      const updateTextarea = parseMarkdown(elementTitle.content);
+      showTextArea.innerHTML = updateTextarea;
     });
   });
 }
+
 
 WritingTextArea.addEventListener("input", function () {
   //  Stop immediately if no active note
@@ -91,6 +94,14 @@ WritingTextArea.addEventListener("input", function () {
   const activeNote = renderNotes.find(function (note) {
     return note.id === activeNoteId;
   });
+
+  firstLine = WritingTextArea.value.split("\n");
+  if (firstLine[0] === "") {
+    activeNote.title = "Untitled";
+  } else {
+    activeNote.title = firstLine[0];
+  }
+
   //  Update the folder now that you have it
   if (activeNote) {
     activeNote.content = WritingTextArea.value;
@@ -98,6 +109,17 @@ WritingTextArea.addEventListener("input", function () {
     savedNotes();
     NotesTitleFunction();
   }
+
+  const storeText = parseMarkdown(WritingTextArea.value);
+  showTextArea.innerHTML = storeText;
 });
+
+function parseMarkdown(text) {
+  let html = text
+    .replace(/^# (.*)/gm, "<h1>$1</h1>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>");
+  return html;
+}
 
 NotesTitleFunction();
