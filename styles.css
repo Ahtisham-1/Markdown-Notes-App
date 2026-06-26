@@ -1,144 +1,188 @@
-/* --- Retro Theme Variables & Reset --- */
+/* --- Base Variables & Reset --- */
 :root {
-  --bg-color: #121212;
-  --panel-bg: #1a1a1a;
-  --text-color: #33ff33; /* Classic terminal green */
-  --text-dim: #1db91d;
-  --border-color: #33ff33;
-  --accent-color: #ff00ff; /* Retro magenta for active states */
-  --font-family: "Consolas", Courier, monospace;
+  --bg-color: #f4f0eb; /* Warm off-white */
+  --black: #111111;
+  --white: #ffffff;
+  --accent-yellow: #facc15;
+  --accent-blue: #93c5fd;
+  --accent-pink: #f472b6;
+  --border-width: 3px;
+  --shadow-offset: 6px;
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: var(--font-family);
-  color: var(--text-color);
-  background-color: transparent;
 }
 
 body {
+  /* System font stack for a clean, stark look */
+  font-family:consolas, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-color);
+  color: var(--black);
+  height: 100vh;
   overflow: hidden;
-  /* Subtle scanline effect */
-  /* background-linear-gradient:rgba(0, 0, 0, 0.25, 50%); */
-  background-size: 100% 4px;
 }
 
+/* --- Layout --- */
 main {
-  display: grid;
-  grid-template-columns: 300px 1fr 1fr;
-  padding: 10px;
-  gap: 10px;
+  display: flex;
+  height: 100vh;
+  padding: 20px;
+  gap: 20px;
 }
 
-main > div {
-  background-color: var(--panel-bg);
-  border: 3px double var(--border-color);
-  padding: 15px;
-  height: calc(100vh - 20px);
-  box-shadow:
-    inset 0 0 10px rgba(51, 255, 51, 0.2),
-    0 0 10px rgba(0, 0, 0, 0.5);
-  overflow-y: auto;
-}
-
+/* --- Sidebar --- */
 #sideBar {
+  flex: 0 0 320px;
+  background-color: var(--white);
+  border: var(--border-width) solid var(--black);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--black);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  text-align: left;
 }
 
 #sideBar h1 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 900;
   text-transform: uppercase;
-  text-align: center;
-  letter-spacing: 2px;
-  text-shadow: 0 0 5px var(--text-color);
-  border-bottom: 2px dashed var(--border-color);
-  padding-bottom: 10px;
+  letter-spacing: -1px;
+  margin-bottom: 10px;
 }
 
-button,
+/* --- Inputs & Buttons --- */
 input {
   width: 100%;
-  padding: 10px;
-  border: 2px solid var(--border-color);
-  background-color: #000;
-  color: var(--text-color);
-  font-size: 0.9rem;
-  text-transform: uppercase;
+  padding: 12px;
+  border: var(--border-width) solid var(--black);
+  font-family: inherit;
   font-weight: bold;
-  cursor: pointer;
-  outline: none;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
 }
 
-button:hover,
 input:focus {
-  background-color: var(--text-color);
-  color: #000;
-  box-shadow: 0 0 10px var(--text-color);
+  outline: none;
+  background-color: var(--accent-yellow);
 }
 
-input::placeholder {
-  color: var(--text-dim);
-  opacity: 0.7;
+button {
+  background-color: var(--accent-yellow);
+  color: var(--black);
+  border: var(--border-width) solid var(--black);
+  box-shadow: 4px 4px 0px var(--black);
+  padding: 12px;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
+button:active {
+  /* The "press down" effect */
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px var(--black);
+}
+
+/* --- Note List Items --- */
 #showNotesList {
-  margin-top: 10px;
-  border: 1px dashed var(--text-dim);
-  padding: 10px;
-  flex-grow: 1;
-  font-size: 0.85rem;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 5px;
+}
+
+#showNotesList > div {
+  border: var(--border-width) solid var(--black);
+  background-color: var(--white);
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 4px 4px 0px var(--black);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+#showNotesList > div:hover {
+  background-color: var(--accent-blue);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--black);
+}
+
+.highlight-active-container {
+  background-color: var(--accent-pink) !important;
+}
+
+#showNotesList h2 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+#showNotesList span {
+  font-size: 0.8rem;
+  font-weight: bold;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Delete Button specific styling */
+#showNotesList button {
+  background-color: var(--white);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  box-shadow: 3px 3px 0px var(--black);
+}
+
+#showNotesList button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px var(--black);
+}
+
+/* --- Text Area & Preview Containers --- */
+#textareaContainer,
+#showTextArea {
+  flex: 1;
+  background-color: var(--white);
+  border: var(--border-width) solid var(--black);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--black);
+  padding: 30px;
   overflow-y: auto;
 }
 
-#textareaContainer {
-  padding: 5px;
-}
-
+/* The actual typing area */
 #WritingTextArea {
   width: 100%;
   height: 100%;
   border: none;
   resize: none;
-  outline: none;
-  background-color: #000;
-  color: var(--text-color);
-  font-size: 1rem;
-  line-height: 1.5;
-  padding: 10px;
-  caret-color: var(--accent-color);
-}
-
-#showTextArea {
-  text-align: left;
+  font-family: "consolas",'Courier New', Courier, monospace; /* Monospace for raw markdown */
+  font-size: 1.1rem;
   line-height: 1.6;
-  white-space: pre-wrap;
+  color: var(--black);
 }
 
-::-webkit-scrollbar {
-  width: 12px;
+#WritingTextArea:focus {
+  outline: none;
 }
 
-::-webkit-scrollbar-track {
-  background: #000;
-  border-left: 2px solid var(--border-color);
+/* --- Markdown Preview Typography --- */
+#showTextArea h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  border-bottom: var(--border-width) solid var(--black);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border: 2px solid #000;
+#showTextArea strong {
+  background-color: var(--accent-yellow);
+  padding: 0 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-color);
-}
-.highlight-active-container{
-  border: 2px solid greenyellow;
-  background-color: rgba(147, 255, 147, 0.27);
-  padding: 5px;
+#showTextArea em {
+  color: var(--accent-pink);
+  font-style: italic;
+  font-weight: bold;
 }
