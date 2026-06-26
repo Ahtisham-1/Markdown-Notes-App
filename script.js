@@ -42,20 +42,20 @@ addNoteButton.addEventListener("click", function () {
   const newNoteObject = {
     id: "N" + dateFunction(),
     title: "Untitled",
-    content: "Type your text here...",
+    content: "# Type your text here...",
     updatedAt: dateFunction(),
   };
 
   renderNotes.push(newNoteObject);
   savedNotes();
-  NotesTitleFunction();
+  NotesTitleFunction(renderNotes);
 });
 
-function NotesTitleFunction() {
+function NotesTitleFunction(notesToDraw) {
   // clearning the sidebar to avoid duplicates
   showNotesList.textContent = "";
 
-  renderNotes.forEach((elementTitle) => {
+  notesToDraw.forEach((elementTitle) => {
     // parent div for the below two elements
     const listContainer = document.createElement("div");
     if (elementTitle.id === activeNoteId) {
@@ -73,19 +73,37 @@ function NotesTitleFunction() {
     listUpdate.innerHTML = elementTitle.updatedAt;
     listContainer.appendChild(listUpdate);
 
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    listContainer.appendChild(deleteBtn);
+    deleteBtn.addEventListener("click", function (event) {
+      event.stopPropagation();
+      const deleteNote = renderNotes.filter(
+        (note) => note.id !== elementTitle.id,
+      );
+      if(elementTitle.id === activeNoteId){
+        activeNoteId = null
+        WritingTextArea.value = ""
+        showTextArea.innerHTML= ""
+      }
+
+      renderNotes = deleteNote;
+      savedNotes();
+      NotesTitleFunction(renderNotes);
+    });
+
     // appending the list container with the html main div
     showNotesList.appendChild(listContainer);
 
     listContainer.addEventListener("click", function (e) {
       activeNoteId = elementTitle.id;
       WritingTextArea.value = elementTitle.content;
-      NotesTitleFunction();
+      NotesTitleFunction(renderNotes);
       const updateTextarea = parseMarkdown(elementTitle.content);
       showTextArea.innerHTML = updateTextarea;
     });
   });
 }
-
 
 WritingTextArea.addEventListener("input", function () {
   //  Stop immediately if no active note
@@ -107,13 +125,14 @@ WritingTextArea.addEventListener("input", function () {
     activeNote.content = WritingTextArea.value;
     activeNote.updatedAt = dateFunction();
     savedNotes();
-    NotesTitleFunction();
+    NotesTitleFunction(renderNotes);
   }
 
   const storeText = parseMarkdown(WritingTextArea.value);
   showTextArea.innerHTML = storeText;
 });
 
+// to make things bold italic and the first line means heading h1 this is called regex which is too confusing but it is very uselful
 function parseMarkdown(text) {
   let html = text
     .replace(/^# (.*)/gm, "<h1>$1</h1>")
@@ -122,4 +141,13 @@ function parseMarkdown(text) {
   return html;
 }
 
-NotesTitleFunction();
+searchNotes.addEventListener("input", function () {
+  const searchInput = searchNotes.value.toLowerCase();
+  const filterdArray = renderNotes.filter((note) =>
+    note.title.toLowerCase().includes(searchInput),
+  );
+
+  NotesTitleFunction(filterdArray);
+});
+
+NotesTitleFunction(renderNotes);
